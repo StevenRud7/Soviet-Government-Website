@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Soviet Union Leaders</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #9d9d9d;
+      }
+
+      h1 {
+        text-align: center;
+        margin-top: 50px;
+        font-size: 40px;
+        color: rgb(181, 0, 0);
+        text-shadow: 2px 2px 4px rgba(250, 0, 0, 0.3);
+      }
+
+      .leader {
+        border: 2px solid rgb(181, 0, 0);
+        padding: 10px;
+        margin-bottom: 30px;
+        display: flex;
+        align-items: center;
+        background-color: #fff;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+        border-radius: 5px;
+      }
+
+      .leader img {
+        margin-right: 20px;
+        width: 150px;
+        height: 150px;
+        object-fit: cover;
+        object-position: center;
+        border-radius: 50%;
+        box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+      }
+
+      .leader h2 {
+        margin: 0;
+        font-size: 28px;
+        color: rgb(181, 0, 0);
+      }
+
+      .leader p {
+        margin-top: 5px;
+        font-size: 18px;
+        line-height: 1.5;
+        color: #444;
+      }
+
+      .leader ul {
+        margin-top: 10px;
+        margin-left: 30px;
+        font-size: 18px;
+        line-height: 1.5;
+        color: #444;
+      }
+
+      .leader li {
+        margin-bottom: 10px;
+      }
+
+      .leader strong {
+        font-weight: bold;
+        color: rgb(181, 0, 0);
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Soviet Union Leaders</h1>
+
+    <% for (var i = 0; i < leaders.length; i++) { %>
+      <div class="leader">
+        <img src=<%= leaders[i].img %> alt="Placeholder image">
+        <div>
+          <h2><%= leaders[i].name %></h2>
+          <p>Years in Power: <%= leaders[i].years %></p>
+          <p><%= leaders[i].description %></p>
+
+          <% if (leaders[i].policies.length > 0) { %>
+            <h3>Key Policies:</h3>
+            <ul>
+              <% for (var j = 0; j < leaders[i].policies.length; j++) { %>
+                <li>
+                  <strong><%= leaders[i].policies[j].name %>:</strong>
+                  <%= leaders[i].policies[j].description %>
+                </li>
+              <% } %>
+            </ul>
+          <% } %>
+        </div>
+      </div>
+    <% } %>
+  </body>
+</html>

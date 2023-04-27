@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #9d9d9d;
+            font-family: Helvetica, sans-serif;
+        }
+
+        h1 {
+            text-align: center;
+            margin-top: 30px;
+            margin-bottom: 30px;
+            color: rgb(109, 0, 0);
+            font-weight: bold;
+        }
+
+        /* The actual timeline (the vertical ruler) */
+        .timeline {
+            position: relative;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* The actual timeline (the vertical ruler) */
+        .timeline::after {
+            content: '';
+            position: absolute;
+            width: 7px;
+            background-color: #ba0000;
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            margin-left: -3px;
+        }
+
+        /* Container around content */
+        .container {
+            padding: 10px 40px;
+            position: relative;
+            background-color: inherit;
+            width: 50%;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+
+
+        .text {
+            position: relative;
+            background-color: white;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* The actual content */
+        .content {
+            padding: 20px 30px;
+            background-color: white;
+            position: relative;
+            border-radius: 6px;
+            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+            transition: box-shadow 0.3s ease-in-out;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .text.collapsed {
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+        }
+
+        .text.expanded {
+            width: 100%;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 999;
+            padding: 120px;
+            box-sizing: border-box;
+        }
+
+
+
+        /* The circles on the timeline */
+        .container::after {
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            right: -17px;
+            background-color: white;
+            border: 4px solid #ba0000;
+            top: 15px;
+            border-radius: 50%;
+            z-index: 1;
+            animation-name: pulse;
+            animation-duration: 2s;
+            animation-iteration-count: infinite;
+        }
+
+        .container.expanded {
+            width: 100%;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 999;
+            padding: 120px;
+            box-sizing: border-box;
+        }
+
+        .container.expanded .text {
+            height: auto;
+            overflow-y: visible;
+            white-space: normal;
+            font-size: 150%;
+
+        }
+
+        #expand-button {
+            position: absolute;
+            bottom: 2px;
+            right: 10px;
+            width: 70px;
+            height: 30px;
+            background-color: #ff0101;
+            border-radius: 100%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+
+        }
+
+        #expand-button:hover {
+            background-color: #ff4d4d;
+        }
+
+        /* Add an animation to the expand button */
+        @keyframes expand-pulse {
+            0% {
+                transform: scale(1.5);
+            }
+
+            50% {
+                transform: scale(1.1);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        #expand-button:active {
+            animation: expand-pulse 0.2s ease;
+        }
+
+
+        /* Animation for the circles */
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(186, 0, 0, 0.4);
+            }
+
+            70% {
+                box-shadow: 0 0 0 12px rgba(186, 0, 0, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(186, 0, 0, 0);
+            }
+        }
+
+        /* Place the container to the left */
+        .left {
+            right: 25.4%;
+        }
+
+        /* Place the container to the right */
+        .right {
+            left: 25.3%;
+        }
+
+        /* Add arrows to the left container (pointing right) */
+        .left::before {
+            content: " ";
+            height: 0;
+            position: absolute;
+            top: 22px;
+            width: 0;
+            z-index: 1;
+            right: 30px;
+            border: medium solid white;
+            border-width: 10px 0 10px 10px;
+            border-color: transparent transparent transparent white;
+        }
+
+        /* Add arrows to the right container (pointing left) */
+        .right::before {
+            content: " ";
+            height: 0;
+            position: absolute;
+            top: 22px;
+            width: 0;
+            z-index: 1;
+            left: 30px;
+            border: medium solid white;
+            border-width: 10px 10px 10px 0;
+            border-color: transparent white transparent transparent;
+        }
+
+        /* Fix the circle for containers on the right side */
+        .right::after {
+            content: '';
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            left: -16px;
+            background-color: white;
+            border: 4px solid #ba0000;
+            top: 15px;
+            border-radius: 50%;
+            z-index: 1;
+            transition: border-color 0.3s ease-in-out;
+        }
+
+        /* Fix the circle for containers on the right side */
+        .left::after {
+            content: '';
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            right: px;
+            background-color: white;
+            border: 4px solid #ba0000;
+            top: 15px;
+            border-radius: 50%;
+            z-index: 1;
+            transition: border-color 0.3s ease-in-out;
+        }
+
+
+
+
+        /* Media queries - Responsive timeline on screens less than 600px wide */
+        @media screen and (max-width: 600px) {
+
+            /* Place the timelime to the left */
+            .timeline::after {
+                left: 31px;
+            }
+
+            /* Full-width containers */
+            .container {
+                width: 100%;
+                padding-left: 70px;
+                padding-right: 25px;
+            }
+
+            /* Make sure that all arrows are pointing leftwards */
+            .container::before {
+                left: 60px;
+                border: medium solid white;
+                border-width: 10px 10px 10px 0;
+                border-color: transparent white transparent transparent;
+            }
+
+            /* Make sure all circles are at the same spot */
+            .left::after,
+            .right::after {
+                left: 15px;
+            }
+
+            /* Make all right containers behave like the left ones */
+            .right {
+                left: 0%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Timeline of Soviet Union History</h1>
+    <div class="timeline">
+        <div class="container left">
+            <div class="content">
+                <h2>1922 Formation of the Soviet Union</h2>
+                <p class="text collapsed">A 1922 treaty between Russia, Ukraine, Belarus and Transcaucasia formed the
+                    Union of Soviet Socialist Republics (USSR), with Moscow as its capital and the revolutionary
+                    Vladimir Lenin as its leader.</p>
+                <button id="expand-button">Expand</button>
+            </div>
+        </div>
+        <div class="container right">
+            <div class="content">
+                <h2>1924 Death of Lenin and start of Stalin's rule</h2>
+                <p class="text collapsed">Due to declining health conditions Lenin passed away in January of 1924 and
+                    Joseph Stalin became the new leader in a struggle for power.</p>
+                <button id="expand-button">Expand</button>
+            </div>
+        </div>
+        <div class="container left">
+            <div class="content">
+                <h2>1928-1932: Joseph Stalin's First Five-Year Plan is implemented</h2>
+                <p class="text collapsed">Under Stalin's leadership, the Soviet Union embarked on a massive
+                    industrialization campaign aimed at catching up with the industrialized West. The Five-Year Plan
+                    called for the rapid development of heavy industry, such as steel and coal production, as well as
+                    the collectivization of agriculture, which involved the consolidation of small farms into larger,
+                    state-run farms.</p>
+                <button id="expand-button">Expand</button>
+            </div>
+        </div>
+        <div class="container right">
+            <div class="content">
+                <h2>1939 The USSR signs a non-aggression pact, also known as the Molotov-Ribbentrop Pact, with Nazi
+                    Germany </h2>
+                <p class="text collapsed">The countries agreed that they would not attack each other and secretly
+                    divided the countries that lay between them. Germany claimed Western Poland and part of Lithuania.
+                    The Soviet Union was going to occupy Eastern Poland, the Baltic States and part of Finland. The pact
+                    was broken when Germany invades the USSR in 1941, leading to the Soviet Union's entry into World War
+                    II.</p>
+                <button id="expand-button">Expand</button>
+            </div>
+        </div>
+        <div class="container left">
+            <div class="content">
+                <h2>1941-1945 The Soviet Union fights alongside the Allies in World War II, resulting in the defeat of
+                    Nazi Germany</h2>
+                <p class="text collapsed">Despite heavy losses, the Soviet Union and the Allies emerged victorius in
+                    WW2, with the Soviet Union playing a crucial role in the defeat of Nazi Germany due to success in
+                    the key battles of Stalingrad and Kursk.</p>
+                <button id="expand-button">Expand</button>
+            </div>
+        </div>
+        <div class="container right">
+            <div class="content">
+                <h2>1945 The Cold War between the Soviet Union and the United States begins and dominates international
+                    relations</h2>
+                <p class="text collapsed">Following World War II, tensions between the Soviet Union and the United
+                    States began to escalate, leading to the development of the Cold War. This war was characterized by
+                    a state of political and military tension between the two superpowers, with each side engaging in a
+                    variety of proxy wars and arms races.</p>
+                <button id="expand-button">Expand</button>
+            </div>
+        </div>
+        <div class="container left">
+            <div class="content">
+                <h2>1953 The Death of Joseph Stalin</h2>
+                <p class="text collapsed">After the death of Joseph Stalin, the Soviet Union underwent a period of
+                    transition as leadership was handed over to Nikita Khrushchev. Nikita Khrushchev ushers in a new era
+                    of Soviet politics and policies, such as de-Stalinization and attempts to reform the Soviet system.
+                </p>
+                <button id="expand-button">Expand</button>
+            </div>
+        </div>
+        <div class="container right">
+            <div class="content">
+                <h2>1961 Soviet cosmonaut Yuri Gagarin becomes the first person to orbit the Earth</h2>
+                <p class="text collapsed">Gagarin's monumental flight marked a major achievement in Soviet space
+                    exploration and was seen as a major victory in the space race against the United States.</p>
+                <button id="expand-button">Expand</button>
+            </div>
+        </div>
+        <div class="container left">
+            <div class="content">
+                <h2>1964 Khrushchev is ousted from power and replaced by Leonid Brezhnev</h2>
+                <p class="text collapsed">Nikita Khrushchev was removed from power by the Communist Party leadership,
+                    following a period of political instability and economic difficulties in the Soviet Union. Brezhnev
+                    then took his place and was the served as the General Secretary of the Communist Party of the Soviet
+                    Union for the next 18 years.</p>
+                <button id="expand-button">Expand</button>
+            </div>
+        </div>
+        <div class="container right">
+            <div class="content">
+                <h2>1985 Gorbachev becomes General Secretary of the Communist Party</h2>
+                <p class="text collapsed">Mikhail Gorbachev became the leader of the Soviet Union, with a mandate to
+                    reform and modernize the Soviet economy and political system. His policies of perestroika
+                    (restructuring) and glasnost (openness) aim to increase transparency and efficiency in government
+                    and reduce corruption.</p>
+                <button id="expand-button">Expand</button>
+            </div>
+        </div>
+    </div>
+
+</body>
+<script>
+    const containers = document.querySelectorAll('.container');
+
+    containers.forEach(container => {
+        const expandButton = container.querySelector('#expand-button');
+        const text = container.querySelector('.text');
+
+        expandButton.addEventListener('click', () => {
+            container.classList.toggle('expanded');
+
+            if (container.classList.contains('expanded')) {
+                text.classList.remove('collapsed');
+                expandButton.textContent = 'Collapse';
+            } else {
+                text.classList.add('collapsed');
+                expandButton.textContent = 'Expand';
+            }
+        });
+    });
+
+</script>
+
+
+</html>
